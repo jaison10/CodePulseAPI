@@ -1,4 +1,4 @@
-﻿namespace CodePulseAPI.Models.DataModels
+﻿namespace CodePulseAPI.Models.DTO
 {
     public class BlogPosts
     {
