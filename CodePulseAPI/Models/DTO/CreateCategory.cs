@@ -1,4 +1,4 @@
-﻿namespace CodePulseAPI.Models.DomainModels
+﻿namespace CodePulseAPI.Models.DTO
 {
     public class CreateCategory
     {

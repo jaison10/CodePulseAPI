@@ -1,4 +1,4 @@
-﻿using CodePulseAPI.Models.DTO;
+﻿using CodePulseAPI.Models.DomainModels;
 
 namespace CodePulseAPI.Repositories
 {
