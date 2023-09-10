@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using CodePulseAPI.Repositories;
 using DTO = CodePulseAPI.Models.DTO;
+using AutoMapper;
 
 namespace CodePulseAPI.Controllers
 {
@@ -11,10 +12,12 @@ namespace CodePulseAPI.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryRepository categoryRepository;
+        private readonly IMapper mapper;
 
-        public CategoryController(ICategoryRepository categoryRepository)
+        public CategoryController(ICategoryRepository categoryRepository, IMapper mapper)
         {
             this.categoryRepository = categoryRepository;
+            this.mapper = mapper;
         }
         [HttpPost]
         public async Task<IActionResult> CreateCategory([FromBody] DTO.CreateCategory CategoryDetails)
@@ -26,7 +29,7 @@ namespace CodePulseAPI.Controllers
                 UrlHandle = CategoryDetails.UrlHandle,
             };
             var returnCategory = await this.categoryRepository.CreateNewCategory(categoryDet);
-            return Ok(returnCategory);
+            return Ok(mapper.Map<DTO.Category> (returnCategory));
         }
     }
 }

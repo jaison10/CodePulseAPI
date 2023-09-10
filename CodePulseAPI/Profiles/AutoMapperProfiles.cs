@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using DomainModels =  CodePulseAPI.Models.DomainModels;
-using CodePulseAPI.Models.DTO;
+using CodePulseAPI.Models.DomainModels;
+using DTO = CodePulseAPI.Models.DTO;
 
 namespace CodePulseAPI.Profiles
 {
     public class AutoMapperProfiles : Profile
     {
         public AutoMapperProfiles() {
-            CreateMap<Category, DomainModels.Category>();
+            CreateMap<Category, DTO.Category>();
         }
     }
 }

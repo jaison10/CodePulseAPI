@@ -75,3 +75,4 @@ F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\obj\Debug\net7.0\CodePulseAPI.
 F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\obj\Debug\net7.0\CodePulseAPI.genruntimeconfig.cache
 F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\obj\Debug\net7.0\ref\CodePulseAPI.dll
 F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\AutoMapper.dll
+F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
