@@ -31,5 +31,12 @@ namespace CodePulseAPI.Controllers
             var returnCategory = await this.categoryRepository.CreateNewCategory(categoryDet);
             return Ok(mapper.Map<DTO.Category> (returnCategory));
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var allCategories = await this.categoryRepository.GetAllCategories();
+            var afterMapping = mapper.Map<List<DTO.Category>>(allCategories);
+            return Ok(afterMapping);
+        }
     }
 }
