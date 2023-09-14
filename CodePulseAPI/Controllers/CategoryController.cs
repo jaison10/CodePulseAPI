@@ -38,5 +38,34 @@ namespace CodePulseAPI.Controllers
             var afterMapping = mapper.Map<List<DTO.Category>>(allCategories);
             return Ok(afterMapping);
         }
+        [HttpGet]
+        [Route("{catId:guid}")]
+        public async Task<IActionResult> GetCategoryDetails([FromRoute] Guid catId)
+        {
+            var categoryDet = await this.categoryRepository.GetCategoryDetails(catId);
+            if (categoryDet != null)
+            {
+                return Ok(mapper.Map<DTO.Category>(categoryDet));
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        [HttpPut]
+        [Route("{catId:guid}")]
+        public async Task<IActionResult> UpdateCategory([FromRoute] Guid catId, [FromBody] DTO.UpdateCategory category)
+        {
+            var categoryDet = await this.categoryRepository.UpdateCategory(catId, category);
+            if (categoryDet != null)
+            {
+                return Ok(mapper.Map<DTO.Category>(categoryDet));
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
     }
 }
