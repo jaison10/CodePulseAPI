@@ -1,5 +1,6 @@
 ﻿using CodePulseAPI.Data;
 using CodePulseAPI.Models.DomainModels;
+using DTO = CodePulseAPI.Models.DTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodePulseAPI.Repositories
@@ -19,9 +20,31 @@ namespace CodePulseAPI.Repositories
             if (blog == null) { return null; }
             return blog.Entity;
         }
-        public async Task<IEnumerable<BlogPosts>> GetAllBlogs()
+        public async Task<IEnumerable<BlogPosts?>> GetAllBlogs()
         {
             return await this.context.BlogPosts.ToListAsync();
+        }
+        public async Task<BlogPosts?> GetABlog(Guid blogId)
+        {
+            return await this.context.BlogPosts.FirstOrDefaultAsync( blog=> blog.Id == blogId);
+        }
+        public async Task<BlogPosts?> UpdateBlog(Guid blogId, DTO.UpdateBlog blog)
+        {
+            var existingBlog = await this.GetABlog(blogId);
+            if(existingBlog != null)
+            {
+                existingBlog.Title = blog.Title;
+                existingBlog.ShortDesc = blog.ShortDesc;
+                existingBlog.Content = blog.Content;
+                existingBlog.FeaturedImgURL = blog.FeaturedImgURL;
+                existingBlog.PublishedDate = blog.PublishedDate;
+                existingBlog.Author = blog.Author;
+                existingBlog.IsVisible = blog.IsVisible;
+
+                await this.context.SaveChangesAsync();
+                return existingBlog;
+            }
+            return null;
         }
     }
 }

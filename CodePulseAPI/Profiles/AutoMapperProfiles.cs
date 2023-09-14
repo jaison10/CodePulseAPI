@@ -8,6 +8,8 @@ namespace CodePulseAPI.Profiles
     {
         public AutoMapperProfiles() {
             CreateMap<Category, DTO.Category>();
+            CreateMap<BlogPosts, DTO.BlogPosts>();
+            CreateMap<DTO.CreateBlog, BlogPosts> ();
         }
     }
 }
