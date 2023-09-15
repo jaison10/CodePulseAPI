@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodePulseAPI.Repositories
 {
-    public class BlogRepoImplement
+    public class BlogRepoImplement : IBlogRepository
     {
         private readonly CodePulseDbContext context;
 
@@ -17,6 +17,7 @@ namespace CodePulseAPI.Repositories
         public async Task<BlogPosts?>CreateBlog(BlogPosts newBlog)
         {
             var blog =  await this.context.BlogPosts.AddAsync(newBlog);
+            await this.context.SaveChangesAsync();
             if (blog == null) { return null; }
             return blog.Entity;
         }

@@ -18,6 +18,7 @@ builder.Services.AddDbContext<CodePulseDbContext>(options =>
 });
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepoImplement>();
+builder.Services.AddScoped<IBlogRepository, BlogRepoImplement>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddCors((options) =>

@@ -5,7 +5,7 @@ namespace CodePulseAPI.Repositories
 {
     public interface IBlogRepository
     {
-        Task<BlogPosts> CreateBlog(BlogPosts newBlog);
+        Task<BlogPosts?> CreateBlog(BlogPosts newBlog);
         Task<IEnumerable<BlogPosts?>> GetAllBlogs();
         Task<BlogPosts?> GetABlog(Guid blogId);
         Task<BlogPosts?> UpdateBlog(Guid blogId, DTO.UpdateBlog blog);

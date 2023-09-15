@@ -3,7 +3,6 @@ using CodePulseAPI.Models.DomainModels;
 using DTO = CodePulseAPI.Models.DTO;
 using CodePulseAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using CodePulseAPI.Models.DTO;
 
 namespace CodePulseAPI.Controllers
 {
@@ -35,6 +34,7 @@ namespace CodePulseAPI.Controllers
             return Ok(mapper.Map<DTO.BlogPosts>(createdBlog));
         }
         [HttpGet]
+        [Route("{blogId:guid}")]
         public async Task<IActionResult> GetPostDetails([FromRoute] Guid blogId)
         {
             var blogDet = await this.blogpostRepo.GetABlog(blogId);
@@ -42,10 +42,11 @@ namespace CodePulseAPI.Controllers
             return Ok(mapper.Map<DTO.BlogPosts>(blogDet));
         }
         [HttpPut]
+        [Route("{blogId:guid}")]
         public async Task<IActionResult> UpdateBlog([FromRoute] Guid blogId, [FromBody] DTO.UpdateBlog blog)
         {
             var updatedDet = await this.blogpostRepo.UpdateBlog(blogId, blog);
-            if (updatedDet == null) return null;
+            if (updatedDet == null) return NotFound();
             return Ok(mapper.Map<DTO.BlogPosts>(updatedDet));
         }
     }
