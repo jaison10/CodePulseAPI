@@ -21,9 +21,13 @@ namespace CodePulseAPI.Repositories
             if (blog == null) { return null; }
             return blog.Entity;
         }
-        public async Task<IEnumerable<BlogPosts?>> GetAllBlogs()
+        public async Task<IEnumerable<BlogPosts?>> GetAllBlogs(int page)
         {
-            return await this.context.BlogPosts.ToListAsync();
+            var loadPages = 10;
+            return await this.context.BlogPosts.OrderByDescending(blog => blog.PublishedDate)
+                .Skip((page-1) * loadPages)
+                .Take(loadPages)
+                .ToListAsync();
         }
         public async Task<BlogPosts?> GetABlog(Guid blogId)
         {
@@ -38,12 +42,22 @@ namespace CodePulseAPI.Repositories
                 existingBlog.ShortDesc = blog.ShortDesc;
                 existingBlog.Content = blog.Content;
                 existingBlog.FeaturedImgURL = blog.FeaturedImgURL;
-                existingBlog.PublishedDate = blog.PublishedDate;
                 existingBlog.Author = blog.Author;
                 existingBlog.IsVisible = blog.IsVisible;
 
                 await this.context.SaveChangesAsync();
                 return existingBlog;
+            }
+            return null;
+        }
+        public async Task<BlogPosts?> DeleteBlog(Guid blogId)
+        {
+            var blog = await this.GetABlog(blogId);
+            if(blog != null)
+            {
+                this.context.BlogPosts.Remove(blog);
+                await this.context.SaveChangesAsync();
+                return blog;
             }
             return null;
         }

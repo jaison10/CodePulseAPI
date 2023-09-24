@@ -19,9 +19,9 @@ namespace CodePulseAPI.Controllers
             this.mapper = mapper;
         }
         [HttpGet]
-        public async Task<IActionResult> GetPosts()
+        public async Task<IActionResult> GetPosts(int page)
         {
-            var blogs = await this.blogpostRepo.GetAllBlogs();
+            var blogs = await this.blogpostRepo.GetAllBlogs(page);
             if (blogs == null) return NotFound();
             return Ok(mapper.Map<List<DTO.BlogPosts>>(blogs));
         }
@@ -46,6 +46,14 @@ namespace CodePulseAPI.Controllers
         public async Task<IActionResult> UpdateBlog([FromRoute] Guid blogId, [FromBody] DTO.UpdateBlog blog)
         {
             var updatedDet = await this.blogpostRepo.UpdateBlog(blogId, blog);
+            if (updatedDet == null) return NotFound();
+            return Ok(mapper.Map<DTO.BlogPosts>(updatedDet));
+        }
+        [HttpDelete]
+        [Route("{blogId:guid}")]
+        public async Task<IActionResult> DeleteBlog([FromRoute] Guid blogId)
+        {
+            var updatedDet = await this.blogpostRepo.DeleteBlog(blogId);
             if (updatedDet == null) return NotFound();
             return Ok(mapper.Map<DTO.BlogPosts>(updatedDet));
         }
