@@ -9,5 +9,6 @@
         public string UrlHandle { get; set; }
         public string Author { get; set; }
         public bool IsVisible { get; set; }
+        public Guid[] CategoryIDs { get; set; }
     }
 }

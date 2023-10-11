@@ -2,16 +2,19 @@
 using CodePulseAPI.Models.DomainModels;
 using DTO = CodePulseAPI.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using Azure.Core;
 
 namespace CodePulseAPI.Repositories
 {
     public class BlogRepoImplement : IBlogRepository
     {
         private readonly CodePulseDbContext context;
+        private readonly ICategoryRepository categoryRepo;
 
-        public BlogRepoImplement(CodePulseDbContext context)
+        public BlogRepoImplement(CodePulseDbContext context, ICategoryRepository categoryRepo)
         {
             this.context = context;
+            this.categoryRepo = categoryRepo;
         }
         
         public async Task<BlogPosts?>CreateBlog(BlogPosts newBlog)
@@ -27,11 +30,14 @@ namespace CodePulseAPI.Repositories
             return await this.context.BlogPosts.OrderByDescending(blog => blog.PublishedDate)
                 .Skip((page-1) * loadPages)
                 .Take(loadPages)
+                .Include(x=> x.Categories)
                 .ToListAsync();
         }
         public async Task<BlogPosts?> GetABlog(Guid blogId)
         {
-            return await this.context.BlogPosts.FirstOrDefaultAsync( blog=> blog.Id == blogId);
+            //return await this.context.BlogPosts.FirstOrDefaultAsync(blog => blog.Id == blogId);
+            //return await this.context.BlogPosts.SingleOrDefaultAsync(blog => blog.Id == blogId);
+            return await this.context.BlogPosts.Include(x => x.Categories).FirstOrDefaultAsync(blog => blog.Id == blogId);
         }
         public async Task<BlogPosts?> UpdateBlog(Guid blogId, DTO.UpdateBlog blog)
         {
@@ -45,6 +51,15 @@ namespace CodePulseAPI.Repositories
                 existingBlog.Author = blog.Author;
                 existingBlog.IsVisible = blog.IsVisible;
 
+                existingBlog.Categories = new List<Category>();
+                foreach (var categoryGuid in blog.CategoryIDs)
+                {
+                    var existingCategory = await this.categoryRepo.GetCategoryDetails(categoryGuid);
+                    if (existingCategory != null)
+                    {
+                        existingBlog.Categories.Add(existingCategory);
+                    }
+                }
                 await this.context.SaveChangesAsync();
                 return existingBlog;
             }

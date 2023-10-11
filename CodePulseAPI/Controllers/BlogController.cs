@@ -12,25 +12,70 @@ namespace CodePulseAPI.Controllers
     {
         private readonly IBlogRepository blogpostRepo;
         private readonly IMapper mapper;
+        private readonly ICategoryRepository categoryRepo;
 
-        public BlogController(IBlogRepository blogpostRepo, IMapper mapper)
+        public BlogController(IBlogRepository blogpostRepo, IMapper mapper, ICategoryRepository categoryRepo)
         {
             this.blogpostRepo = blogpostRepo;
             this.mapper = mapper;
+            this.categoryRepo = categoryRepo;
         }
         [HttpGet]
         public async Task<IActionResult> GetPosts(int page)
         {
             var blogs = await this.blogpostRepo.GetAllBlogs(page);
             if (blogs == null) return NotFound();
-            return Ok(mapper.Map<List<DTO.BlogPosts>>(blogs));
+            //return Ok(mapper.Map<List<DTO.BlogPosts>>(blogs));
+            var response = new List<DTO.BlogPosts>();
+            foreach(var blog in blogs)
+            {
+                response.Add(new DTO.BlogPosts
+                {
+                    Id = blog.Id,
+                    Author = blog.Author,
+                    Content = blog.Content,
+                    FeaturedImgURL = blog.FeaturedImgURL,
+                    IsVisible = blog.IsVisible,
+                    PublishedDate = blog.PublishedDate,
+                    ShortDesc = blog.ShortDesc,
+                    Title = blog.Title,
+                    UrlHandle = blog.UrlHandle,
+                    Categories = blog.Categories.Select(x => new DTO.Category
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        UrlHandle = x.UrlHandle
+                    }).ToList()
+                });
+            }
+            return Ok(response);
         }
         [HttpPost]
         public async Task<IActionResult> CreateBlog([FromBody] DTO.CreateBlog blog)
         {
-            var blogDet = mapper.Map<BlogPosts>(blog);
-            var createdBlog = await this.blogpostRepo.CreateBlog(blogDet);
-            if(createdBlog == null) return NotFound();
+            //var blogDet = mapper.Map<BlogPosts>(blog);
+            var DomainBlog = new BlogPosts
+            {
+                Title = blog.Title,
+                Author = blog.Author,
+                Content = blog.Content,
+                IsVisible = blog.IsVisible,
+                UrlHandle = blog.UrlHandle,
+                ShortDesc = blog.ShortDesc,
+                PublishedDate = blog.PublishedDate,
+                FeaturedImgURL = blog.FeaturedImgURL,
+                Categories = new List<Category>()
+            };
+            foreach (var id in blog.CategoryIDs)
+            {
+                var blogDet = await this.categoryRepo.GetCategoryDetails(id);
+                if (blogDet != null)
+                {
+                    DomainBlog.Categories.Add(blogDet);
+                }
+            }
+            var createdBlog = await this.blogpostRepo.CreateBlog(DomainBlog);
+            if (createdBlog == null) return NotFound();
             return Ok(mapper.Map<DTO.BlogPosts>(createdBlog));
         }
         [HttpGet]
