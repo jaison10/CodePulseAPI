@@ -10,5 +10,6 @@ namespace CodePulseAPI.Repositories
         Task<BlogPosts?> GetABlog(Guid blogId);
         Task<BlogPosts?> UpdateBlog(Guid blogId, DTO.UpdateBlog blog);
         Task<BlogPosts?> DeleteBlog(Guid blogId);
+        Task<BlogPosts?> GetBlogByUrl(String urlHandle);
     }
 }

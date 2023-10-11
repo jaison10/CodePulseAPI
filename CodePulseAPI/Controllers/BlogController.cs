@@ -66,6 +66,8 @@ namespace CodePulseAPI.Controllers
                 FeaturedImgURL = blog.FeaturedImgURL,
                 Categories = new List<Category>()
             };
+            if (DomainBlog.UrlHandle == null) DomainBlog.UrlHandle = DomainBlog.Title;
+            DomainBlog.UrlHandle = await this.GenerateUniqueUrlHandle(DomainBlog.UrlHandle);
             foreach (var id in blog.CategoryIDs)
             {
                 var blogDet = await this.categoryRepo.GetCategoryDetails(id);
@@ -101,6 +103,23 @@ namespace CodePulseAPI.Controllers
             var updatedDet = await this.blogpostRepo.DeleteBlog(blogId);
             if (updatedDet == null) return NotFound();
             return Ok(mapper.Map<DTO.BlogPosts>(updatedDet));
+        }
+        [HttpGet]
+        [Route("{urlHandle}")]
+        public async Task<IActionResult> GetBlogByUrlHandle([FromRoute] string urlHandle)
+        {
+            var blog = await blogpostRepo.GetBlogByUrl(urlHandle);
+            if (blog == null) return NotFound();
+            return Ok(mapper.Map<BlogPosts>(blog));
+        }
+        private async Task<string> GenerateUniqueUrlHandle(string urlHandle)
+        {
+            var newUrlHandle = urlHandle.ToLower().Replace(" ", "-");
+            while(await this.blogpostRepo.GetBlogByUrl(newUrlHandle) != null)
+            {
+                newUrlHandle = $"{newUrlHandle}-{Guid.NewGuid().ToString().Substring(0, 4)}";
+            }
+            return newUrlHandle;
         }
     }
 }

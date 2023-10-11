@@ -76,5 +76,11 @@ namespace CodePulseAPI.Repositories
             }
             return null;
         }
+        public async Task<BlogPosts?> GetBlogByUrl(String urlHandle)
+        {
+            var blog = await this.context.BlogPosts.FirstOrDefaultAsync(blog => blog.UrlHandle == urlHandle);
+            if (blog == null) return null;
+            return blog;
+        }
     }
 }
