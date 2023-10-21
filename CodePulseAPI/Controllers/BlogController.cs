@@ -22,6 +22,7 @@ namespace CodePulseAPI.Controllers
             this.categoryRepo = categoryRepo;
         }
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetPosts(int page)
         {
             var blogs = await this.blogpostRepo.GetAllBlogs(page);
@@ -52,6 +53,7 @@ namespace CodePulseAPI.Controllers
             return Ok(response);
         }
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateBlog([FromBody] DTO.CreateBlog blog)
         {
             //var blogDet = mapper.Map<BlogPosts>(blog);
@@ -91,6 +93,7 @@ namespace CodePulseAPI.Controllers
         }
         [HttpPut]
         [Route("{blogId:guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateBlog([FromRoute] Guid blogId, [FromBody] DTO.UpdateBlog blog)
         {
             var updatedDet = await this.blogpostRepo.UpdateBlog(blogId, blog);
@@ -98,7 +101,7 @@ namespace CodePulseAPI.Controllers
             return Ok(mapper.Map<DTO.BlogPosts>(updatedDet));
         }
         [HttpDelete]
-        [Authorize]
+        [Authorize(Roles = "Writer")]
         [Route("{blogId:guid}")]
         public async Task<IActionResult> DeleteBlog([FromRoute] Guid blogId)
         {

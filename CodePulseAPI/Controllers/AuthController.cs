@@ -1,4 +1,5 @@
 ﻿using CodePulseAPI.Models.DTO;
+using CodePulseAPI.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace CodePulseAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
+        private readonly ITokenRepository tokenRepository;
 
-        public AuthController(UserManager<IdentityUser> userManager)
+        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
         {
             this.userManager = userManager;
+            this.tokenRepository = tokenRepository;
         }
 
         [HttpPost]
@@ -53,6 +56,34 @@ namespace CodePulseAPI.Controllers
                     }
                 }
             }
+            return ValidationProblem(ModelState);
+        }
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] RegisterUser request)
+        {
+            var user = await this.userManager.FindByEmailAsync(request.Email.Trim());
+            if (user != null)
+            {
+                var pswdMatch = await this.userManager.CheckPasswordAsync(user, request.Password);
+                if (pswdMatch == true)
+                {
+                    var roles = await this.userManager.GetRolesAsync(user);
+
+                    var returnUser = new LoggedUser
+                    {
+                        Email = request.Email,
+                        Token = tokenRepository.CreateJwnToken(user, roles.ToList()),
+                        Roles = roles.ToList()
+                    };
+                    return Ok(returnUser);
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Login Failed!");
+                }
+            }
+            ModelState.AddModelError("", "Login Failed!");
             return ValidationProblem(ModelState);
         }
     }

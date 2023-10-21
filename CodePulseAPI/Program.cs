@@ -27,6 +27,7 @@ builder.Services.AddDbContext<AuthDbContext>(options =>
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepoImplement>();
 builder.Services.AddScoped<IBlogRepository, BlogRepoImplement>();
+builder.Services.AddScoped<ITokenRepository, TokenRepoImplement>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddCors((options) =>
