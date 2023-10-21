@@ -5,7 +5,7 @@ namespace CodePulseAPI.Data
 {
     public class CodePulseDbContext : DbContext
     {
-        public CodePulseDbContext(DbContextOptions options) : base(options)
+        public CodePulseDbContext(DbContextOptions<CodePulseDbContext> options) : base(options)
         {
         }
         public DbSet<Category> Categories { get; set; }

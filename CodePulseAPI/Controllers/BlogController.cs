@@ -3,6 +3,7 @@ using CodePulseAPI.Models.DomainModels;
 using DTO = CodePulseAPI.Models.DTO;
 using CodePulseAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CodePulseAPI.Controllers
 {
@@ -97,6 +98,7 @@ namespace CodePulseAPI.Controllers
             return Ok(mapper.Map<DTO.BlogPosts>(updatedDet));
         }
         [HttpDelete]
+        [Authorize]
         [Route("{blogId:guid}")]
         public async Task<IActionResult> DeleteBlog([FromRoute] Guid blogId)
         {

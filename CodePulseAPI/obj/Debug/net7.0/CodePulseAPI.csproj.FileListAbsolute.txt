@@ -77,3 +77,9 @@ F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\obj\Debug\net7.0\ref\CodePulse
 F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\AutoMapper.dll
 F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\Microsoft.Extensions.Identity.Core.dll
+F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
+F:\DotNet\CodePulse\API\CodePulseAPI\CodePulseAPI\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
